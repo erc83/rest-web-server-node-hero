@@ -13,6 +13,9 @@ export class TodoRoutes {
         //router.get('/', (req, res)=> todoController.getTodos(req, res) );
         // podemos mandar la referencia a la funcion
         router.get('/', todoController.getTodos );
+        
+        router.get('/:id', todoController.getTodoById );
+
 
         return router;
     }
