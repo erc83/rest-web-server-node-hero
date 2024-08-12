@@ -27,10 +27,19 @@ export class TodosController {
 
         public createTodo = (req: Request, res: Response) => {
             // obtener el body
-            const body = req.body;
+            const { text } = req.body;
+            if( !text ) return res.status(400).json({ error: 'Text property is required' });
 
+            const newTodo = {
+                id: todos.length +1,
+                text: text,
+                createdAt: null
+            }
+
+            // Se inserta un nuevo todo que no es el body
+            todos.push( newTodo );
             //res.json('POST create todo')
-            res.json( body );
+            res.json( newTodo );
 
         };
 }
