@@ -23,6 +23,8 @@ export class Server {
     async start() {
 
         //* middlewares     -> funciones que se ejecutan cuando pasan por una ruta
+        this.app.use( express.json() );     //cualquier peticion que pase por mi app pasa por este middleware
+        this.app.use( express.urlencoded({ extended: true })) // x-www-form-urlencoded
 
         //* Public Folder
         //this.app.use( express.static( 'public' ) );
