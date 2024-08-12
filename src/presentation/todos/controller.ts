@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { Request, Response } from "express"
 
 const todos = [
@@ -42,4 +43,24 @@ export class TodosController {
             res.json( newTodo );
 
         };
+
+        public updateTodo = (req: Request, res: Response) => {
+            const id = +req.params.id; // viene con un texto se convierte con el +
+            if( isNaN(id) ) return res.status( 400 ).json( { error: 'Id argument is not a number' } );
+
+            const todo = todos.find( todo => todo.id === id );
+            if( !todo ) return res.status( 404 ).json( { error: `Todo with id ${ id } not found` });
+
+            const { text, createdAt } = req.body;
+            //if( !text ) return res.status( 400 ).json( {error: 'Text property is required' });
+
+            todo.text = text || todo.text; // va a ser el texto si viene si no va a ser el mismo valor
+            ( createdAt === 'null')
+                ? todo.createdAt = null
+                : todo.createdAt = new Date( createdAt || todo.createdAt );
+
+            res.json( todo )
+        }
+
+
 }
