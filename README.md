@@ -10,7 +10,6 @@
 
     -> Crea la carpeta dist
 
-
 ### Agregar las dependencias
 
 > $ npm i dotenv env-var
@@ -24,3 +23,5 @@
 # Dev
 
 1. Clonar el .env.template y crear el .env
+
+
