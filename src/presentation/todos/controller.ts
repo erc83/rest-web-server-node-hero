@@ -1,5 +1,6 @@
 import { create } from "domain";
 import { Request, Response } from "express"
+import { prisma } from "../../data/postgres";
 
 const todos = [
     { id: 1, text: 'Buy milk', createdAt: new Date() },
@@ -26,21 +27,16 @@ export class TodosController {
                 : res.status(404).json({ error: `TODO with id ${ id } not found`})
         }
 
-        public createTodo = (req: Request, res: Response) => {
+        public createTodo = async (req: Request, res: Response) => {
             // obtener el body
             const { text } = req.body;
             if( !text ) return res.status(400).json({ error: 'Text property is required' });
 
-            const newTodo = {
-                id: todos.length +1,
-                text: text,
-                createdAt: null
-            }
+            const todo = await prisma.todo.create({
+                data: { text : text }
+            })
 
-            // Se inserta un nuevo todo que no es el body
-            todos.push( newTodo );
-            //res.json('POST create todo')
-            res.json( newTodo );
+            res.json( todo );
 
         };
 
