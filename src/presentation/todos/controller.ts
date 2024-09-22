@@ -13,7 +13,6 @@ export class TodosController {
 
         public getTodos = async (req: Request, res: Response)=> {
             const todos = await this.todoRepository.getAll();
-            console.log({ todos });
             return res.json(todos);
         }
 
@@ -33,18 +32,11 @@ export class TodosController {
 
         public createTodo = async (req: Request, res: Response) => {
             const [error, createTodoDto] = CreateTodoDto.create(req.body);
-            if (error) return res.status(400).json({ error });
+            if (error) return res.status(400).json({ error }); // si falla el DTO no es necesario continuar
 
-            // obtener el body anteriormente
-            //const { text } = req.body;
-            //if( !text ) return res.status(400).json({ error: 'Text property is required' });
-
-            const todo = await prisma.todo.create({
-                data: createTodoDto!
-            });
+            const todo = await this.todoRepository.create( createTodoDto! ) // signo de exclamacion porque se que lo tengo
 
             res.json( todo );
-
         };
 
         public updateTodo = async (req: Request, res: Response) => {
