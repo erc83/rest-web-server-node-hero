@@ -19,17 +19,16 @@ export class TodosController {
 
         public getTodoById = async (req: Request, res: Response)=> {
             const id = +req.params.id;
-            if( isNaN(id) ) return res.status(400).json({ error: 'ID argument is not a number' });
             
-            const todo = await prisma.todo.findUnique({
-                where: {
-                    int: id
-                }
-            });           
-            
-            ( todo )
-                ? res.json(todo)
-                : res.status(404).json({ error: `TODO with id ${ id } not found`})
+            try {
+                const todo = await this.todoRepository.findById( id ); // si el id no existe puede fallar
+                // si todo sale bien enviamos
+                res.json( todo );
+
+            } catch (error) {
+                res.status(400).json({ error })
+            }
+            // puedo agregar mas validaciones
         }
 
         public createTodo = async (req: Request, res: Response) => {
