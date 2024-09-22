@@ -2,9 +2,9 @@
 export class TodoEntity {
 
     constructor(
-        public id: number,
+        public int: number,
         public text: string,
-        public completedAt?: Date |null
+        public completedAt?: Date|null
     ){}
 
     get isCompleted() {
@@ -12,9 +12,9 @@ export class TodoEntity {
     }
 
     //metodo estatico fromObject, la mando el objeto y crea la entidad
-    public static fromObject( object: {[key: string]: any} ) : TodoEntity{      // TodoEntity valor de retorno
-        const { id, text, completedAt } = object;
-        if( !id ) throw 'Id is required'
+    public static fromObject( object: {[key: string]: any} ): TodoEntity {      // TodoEntity valor de retorno
+        const { int, text, completedAt } = object;
+        if( !int ) throw 'Id is required'
         if( !text ) throw 'text is required'
         
         let newCompletedAt;
@@ -26,7 +26,7 @@ export class TodoEntity {
             }
         }
 
-        return new TodoEntity( id, text, completedAt )
+        return new TodoEntity( int, text, completedAt )
     }
 }
 

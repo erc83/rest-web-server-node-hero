@@ -1,16 +1,20 @@
 import { Request, Response } from "express"
 import { prisma } from "../../data/postgres";
 import { CreateTodoDto, UpdateTodoDto } from "../../domain/dtos";
+import { TodoRepository } from "../../domain";
 
 
 export class TodosController {
 
     //* DI
-    constructor() {}
+    constructor(
+        private readonly todoRepository: TodoRepository, // mandamos el tipo de repository definido hay
+    ) { }
 
         public getTodos = async (req: Request, res: Response)=> {
-            const todos = await prisma.todo.findMany()
-            res.json(todos);
+            const todos = await this.todoRepository.getAll();
+            console.log({ todos });
+            return res.json(todos);
         }
 
         public getTodoById = async (req: Request, res: Response)=> {
