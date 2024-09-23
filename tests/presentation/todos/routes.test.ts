@@ -13,6 +13,10 @@ describe('TODO route testing', () => {
         testServer.close()
     })
 
+    beforeEach(async () => {
+        await prisma.todo.deleteMany(); 
+    })
+
     const todo1 = { text: 'Hola mundo test 1' };
     const todo2 = { text: 'Hola mundo test 2' };
 
@@ -39,4 +43,21 @@ describe('TODO route testing', () => {
         expect( response.body[0].completedAt).toBeNull();
     })
 
+    test('should return a TODO api/todos/:id', async () => { 
+
+        const todo = await prisma.todo.create({
+            data: todo1
+        });
+
+        // nos pide la aplicacion que es de nuestro server
+        const response = await request( testServer.app )
+            .get(`/api/todos/${ todo.int }`)
+            .expect(200);   
+
+        expect( response.body ).toEqual({
+            int: todo.int,
+            text: todo.text,
+            completedAt: todo.completedAt
+        })
+    })
 })
