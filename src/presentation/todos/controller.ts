@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 //import { prisma } from "../../data/postgres";
 import { CreateTodoDto, UpdateTodoDto } from "../../domain/dtos";
-import { TodoRepository } from "../../domain";
+import { CustomError, TodoRepository } from "../../domain";
 import { CreateTodo, DeleteTodo, GetTodo, GetTodos, UpdateTodo } from "../../domain/use-cases/todo";
 
 
@@ -26,7 +26,8 @@ export class TodosController {
             new GetTodo( this.todoRepository )
                 .execute( id )
                 .then( todo => res.json( todo ))
-                .catch( error => res.status(400).json({ error }));
+                //.catch( error => res.status(400).json({ error }));
+                .catch( (error: CustomError ) => res.status( error.statusCode ).json({ error: error.message }));
         }
 
         public createTodo = (req: Request, res: Response) => {
