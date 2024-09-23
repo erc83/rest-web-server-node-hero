@@ -122,4 +122,45 @@ describe('TODO route testing', () => {
         })
     })
 
+    test('should return 404 if TODO not found', async () => {  
+        
+        const response = await request( testServer.app )
+            .put(`/api/todos/9999`)
+            .send( { text: 'Hola mundo UPDATE', completedAt: '2023-10-21' }) 
+            .expect( 400 )
+        //console.log(response.body)
+        expect( response.body ).toEqual({ error: 'Todo with id 9999 not found' })
+    })
+
+    test('should return an updated TODO only the date', async () => { 
+        const todo = await prisma.todo.create({data: todo1 }) // nos aseguramos de que exista
+
+        const response = await request( testServer.app )
+            .put(`/api/todos/${ todo.int }`)
+            .send( { completedAt: '2023-10-30' }) 
+            .expect( 200 )
+        // console.log(response.body)
+        expect( response.body ).toEqual({
+            int: expect.any(Number),                    // no puedo decirle un numero en especifico
+            text: todo1.text,
+            completedAt: '2023-10-30T00:00:00.000Z'
+        })
+
+    })
+
+    test('should return an updated TODO only the text', async () => { 
+        const todo = await prisma.todo.create({data: todo1 }) // nos aseguramos de que exista
+
+        const response = await request( testServer.app )
+            .put(`/api/todos/${ todo.int }`)
+            .send( { text: "Prueba update Text Only" }) 
+            .expect( 200 )
+        // console.log(response.body)
+        expect( response.body ).toEqual({
+            int: expect.any(Number),                    // no puedo decirle un numero en especifico
+            text: response.body.text,                   // obtenemos el valor de la response que fue actualiza
+            completedAt: null
+        })
+    })
+
 })
