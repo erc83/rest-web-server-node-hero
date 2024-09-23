@@ -60,4 +60,49 @@ describe('TODO route testing', () => {
             completedAt: todo.completedAt
         })
     })
+
+    test('should return a 404 Not Found api/todos/:id', async () => { 
+        //await prisma.todo.delete({ where: { int:9999 }})
+
+        const todoId = 999
+        // nos pide la aplicacion que es de nuestro server
+        const response = await request( testServer.app )
+            .get(`/api/todos/${ todoId }`)                        
+            .expect(400);   
+
+        // console.log( response.body )
+        expect( response.body ).toEqual({ error: `Todo with id ${ todoId} not found` })
+    })
+
+    test('should return a new TODO api/todos', async () => {  
+        const response = await request( testServer.app )
+            .post('/api/todos')
+            .send( todo1 ) 
+            .expect(201)
+        // console.log(response.body)
+        expect( response.body ).toEqual({
+            int: expect.any(Number),
+            text: todo1.text,
+            completedAt: null
+        })
+    })
+
+    test('should return an error if text is present api/todos', async () => {  
+        const response = await request( testServer.app )
+            .post('/api/todos')
+            .send( { } ) 
+            .expect( 400 )
+        // console.log(response.body)
+        expect( response.body ).toEqual({ error: 'Text property is required' })
+    })
+
+    test('should return an error if text is empty api/todos', async () => {  
+        const response = await request( testServer.app )
+            .post('/api/todos')
+            .send( {text:''} ) 
+            .expect( 400 )
+        // console.log(response.body)
+        expect( response.body ).toEqual({ error: 'Text property is required' })
+    })
+
 })
