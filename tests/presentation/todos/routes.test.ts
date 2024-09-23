@@ -123,13 +123,14 @@ describe('TODO route testing', () => {
     })
 
     test('should return 404 if TODO not found', async () => {  
-        
+        const todoId = 997
+
         const response = await request( testServer.app )
-            .put(`/api/todos/9999`)
+            .put(`/api/todos/${ todoId }`)
             .send( { text: 'Hola mundo UPDATE', completedAt: '2023-10-21' }) 
             .expect( 400 )
         //console.log(response.body)
-        expect( response.body ).toEqual({ error: 'Todo with id 9999 not found' })
+        expect( response.body ).toEqual({ error: `Todo with id ${ todoId } not found` })
     })
 
     test('should return an updated TODO only the date', async () => { 
@@ -161,6 +162,32 @@ describe('TODO route testing', () => {
             text: response.body.text,                   // obtenemos el valor de la response que fue actualiza
             completedAt: null
         })
+    })
+
+    test('should delete TODO api/todos/:id', async () => {  
+        const todo = await prisma.todo.create({data: todo1 }) // nos aseguramos de que exista
+
+        const response = await request( testServer.app )
+            .delete(`/api/todos/${ todo.int }`)
+            .send( { text: "Prueba update Text Only" }) 
+            .expect( 200 )
+        //console.log(response.body)
+        expect( response.body ).toEqual({ 
+            int: todo.int, 
+            text: todo.text, 
+            completedAt: null 
+        })
+    })
+
+    test('should return 404 if todo do not exits api/todos/:id ', async () => {
+
+        const todoId = 998
+        const response = await request( testServer.app )
+            .delete(`/api/todos/${ todoId }`)
+            .send( { text: 'Hola mundo UPDATE', completedAt: '2023-10-21' }) 
+            .expect( 400 )
+        //console.log(response.body)
+        expect( response.body ).toEqual({ error: `Todo with id ${ todoId } not found` })
     })
 
 })
