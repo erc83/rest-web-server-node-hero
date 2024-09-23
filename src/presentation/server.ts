@@ -57,8 +57,8 @@ export class Server {
         })
     }
 
-    public close() {
-        this.serverListener?.close();
+    public close() {                    // metodo llamamos
+        this.serverListener?.close();   // si tiene un valor .close
     }
 
 }
