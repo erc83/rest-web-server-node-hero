@@ -1,9 +1,9 @@
 
 import { envs } from '../src/config/envs'
-import { AppRoutes } from '../src/presentation/routes'
+//import { AppRoutes } from '../src/presentation/routes'
 import { Server } from '../src/presentation/server'
 
-// todo lo que esta en esta ruta es un mock 
+// atodo lo que esta en esta ruta es un mock 
 jest.mock('../src/presentation/server')
 
 describe('should call server with arguments and start', () => {

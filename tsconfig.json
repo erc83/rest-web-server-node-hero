@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*.ts", "public"],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "dist"],
+  "exclude": ["node_modules", "**/*.spec.ts", "src/**/*.test.ts", "dist"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
